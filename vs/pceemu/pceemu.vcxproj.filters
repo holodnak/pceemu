@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\pce">
+      <UniqueIdentifier>{42b2a496-aa82-4154-989c-0c482d01703a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\system">
+      <UniqueIdentifier>{bf31ef44-4fef-4cb9-9fd4-9c80745db7e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ui">
+      <UniqueIdentifier>{25b537bc-c847-4b20-ab13-4eaadd952e1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\pce\huc6280">
+      <UniqueIdentifier>{1739c30b-01e1-4910-a03c-7595db8fdd6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\pce\huc6280\opcodes">
+      <UniqueIdentifier>{3b3bc80c-9930-4928-a7ae-208ba64c91ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\pce\huc6270">
+      <UniqueIdentifier>{d5a664bf-bfe1-40c5-bbf1-a8cb16d1b607}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\pce\huc6260">
+      <UniqueIdentifier>{072e9257-781a-4828-9021-2cd880c84ced}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\pce.cpp">
+      <Filter>Source Files\pce</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6260\huc6260.cpp">
+      <Filter>Source Files\pce\huc6260</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6270\huc6270.cpp">
+      <Filter>Source Files\pce\huc6270</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\addrmodes.cpp">
+      <Filter>Source Files\pce\huc6280</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\disasm.cpp">
+      <Filter>Source Files\pce\huc6280</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\execute.cpp">
+      <Filter>Source Files\pce\huc6280</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\helper.cpp">
+      <Filter>Source Files\pce\huc6280</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\huc6280.cpp">
+      <Filter>Source Files\pce\huc6280</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\opcodes\alu.cpp">
+      <Filter>Source Files\pce\huc6280\opcodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\opcodes\branch.cpp">
+      <Filter>Source Files\pce\huc6280\opcodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\opcodes\compare.cpp">
+      <Filter>Source Files\pce\huc6280\opcodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\opcodes\flag.cpp">
+      <Filter>Source Files\pce\huc6280\opcodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\opcodes\incdec.cpp">
+      <Filter>Source Files\pce\huc6280\opcodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\opcodes\loadstore.cpp">
+      <Filter>Source Files\pce\huc6280\opcodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\opcodes\misc.cpp">
+      <Filter>Source Files\pce\huc6280\opcodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\opcodes\stack.cpp">
+      <Filter>Source Files\pce\huc6280\opcodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\opcodes\transfer.cpp">
+      <Filter>Source Files\pce\huc6280\opcodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6270\helper.cpp">
+      <Filter>Source Files\pce\huc6270</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\video.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\System.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ui\UI.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Emulator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\Input.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\Sound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ui\font_8x8.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ui\UIObject.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ui\UIRoot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\IntCtrl.cpp">
+      <Filter>Source Files\pce</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PceDevice.cpp">
+      <Filter>Source Files\pce</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PceTimer.cpp">
+      <Filter>Source Files\pce</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\GamePad.cpp">
+      <Filter>Source Files\pce</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\pce.h">
+      <Filter>Source Files\pce</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\huc6260\huc6260.h">
+      <Filter>Source Files\pce\huc6260</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\huc6270\huc6270.h">
+      <Filter>Source Files\pce\huc6270</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\huc6280\huc6280.h">
+      <Filter>Source Files\pce\huc6280</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\system\video.h">
+      <Filter>Source Files\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\system\System.h">
+      <Filter>Source Files\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ui\UI.h">
+      <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Emulator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\system\Input.h">
+      <Filter>Source Files\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\system\Sound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ui\UIObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ui\UIRoot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\PceTimer.h">
+      <Filter>Source Files\pce</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\PceDevice.h">
+      <Filter>Source Files\pce</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\IntCtrl.h">
+      <Filter>Source Files\pce</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\GamePad.h">
+      <Filter>Source Files\pce</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
