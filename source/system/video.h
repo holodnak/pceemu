@@ -19,7 +19,7 @@ public:
 	CVideo();
 	~CVideo();
 
-	bool Init();
+	bool Init(SDL_Window *win = 0);
 	void Kill();
 
 	void *Lock(int *pitch);

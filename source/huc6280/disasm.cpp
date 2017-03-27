@@ -87,52 +87,6 @@ static uint8_t addrtable[256] = {
         re,iy,er,bt,zx,zx,zx,er,no,ay,er,er,ax,ax,ax,bb  /*f0-ff*/
 };
 
-/*opcode_t opcodes[] = {
-        {0x0A, a_acc, "asl"},
-        {0x1A, a_acc, "inc"},
-
-        {0x12, a_ind, "ora"},
-
-        {0xD8, a_imp, "cld"},
-        {0x18, a_imp, "clc"},
-        {0x58, a_imp, "cli"},
-        {0xB8, a_imp, "clv"},
-        {0x78, a_imp, "sei"},
-        {0xEA, a_imp, "nop"},
-
-        {0x53, a_imm, "tam"},
-
-        {0x54, a_imp, "csl"},
-        {0xD4, a_imp, "csh"},
-
-        {0x29, a_imm, "and"},
-        {0x69, a_imm, "adc"},
-        {0x89, a_imm, "bit"},
-        {0xA9, a_imm, "lda"},
-
-        {0x4C, a_abs, "jmp"},
-        {0xAD, a_abs, "lda"},
-
-        {0xF0, a_rel, "beq"},
-        {0x80, a_rel, "bra"},
-
-        {0xF3, a_tra, "tai"},
-
-        {0x00, a_end, ""}
-};
-
-opcode_t *findop(uint8_t op)
-{
-    opcode_t *o = opcodes;
-
-    while(o->am != a_end) {
-        if(o->op == op)
-            return(o);
-        o++;
-    }
-    return(0);
-}*/
-
 static opcode_t curop;
 
 opcode_t *findop(uint8_t op)
@@ -288,7 +242,7 @@ uint32_t huc6280_disasm(uint32_t dpc)
 			oplen = 3;
 			offs = (int32_t)(dpc + 2);
 			offs += (int16_t)(int8_t)READ_MEM(dpc + 2);
-			sprintf(opdis, "%s%d #$%02X, $%04X", o->name, o->op & 7, (dpc + 1), offs);
+			sprintf(opdis, "%s%d #$%02X, $%04X", o->name, o->op & 7, READ_MEM(dpc + 1), offs);
 			break;
 
 		case a_tra:

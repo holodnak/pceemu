@@ -97,32 +97,6 @@ static void memwrite(uint32_t addr, uint8_t data)
 	memwrite_real(realaddr, data);
 }
 
-/*static uint8_t memread(uint32_t addr)
-{
-uint8_t seg;
-uint8_t *page;
-
-seg = mpr[(addr >> 13) & 7];
-page = read_mem_pages[seg];
-if (page)
-return(read_mem_pages[seg][addr & 0x1FFF]);
-return(read_mem_funcs[seg](userdata, addr));
-}
-*/
-
-/*static uint8_t memread(uint32_t addr)
-{
-    clocktick();
-	tmpreg = read_mem_funcs[mpr[addr >> 13]](addr);
-    return(tmpreg);
-}
-
-static void memwrite(uint32_t addr, uint8_t data)
-{
-    clocktick();
-	write_mem_funcs[mpr[addr >> 13]](addr, data);
-}*/
-
 static void expand_flags()
 {
     flag_c = (p & 0x01) >> 0;
@@ -182,6 +156,8 @@ static void execute_irq(uint32_t irqvec)
     push((uint8_t)pc);
     compact_flags();
     push(p);
+	flag_d = 0;
+	flag_t = 0;
     flag_i = 1;
     pc = memread(irqvec);
     pc |= memread(irqvec + 1) << 8;

@@ -3,11 +3,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerWorkingDirectory>..\..</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>keith.pce  Screen_Dimension_Test.pce</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>wavy_big.pce Screen_Dimension_Test.pce</LocalDebuggerCommandArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Optimized|Win32'">
+    <LocalDebuggerWorkingDirectory>..\..</LocalDebuggerWorkingDirectory>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>bonkrev.pce Screen_Dimension_Test.pce</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerWorkingDirectory>..\..</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>keith.pce  Screen_Dimension_Test.pce</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>raster_cdrom.pce Screen_Dimension_Test.pce</LocalDebuggerCommandArguments>
   </PropertyGroup>
 </Project>

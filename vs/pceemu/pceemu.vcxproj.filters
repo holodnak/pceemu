@@ -87,9 +87,6 @@
     <ClCompile Include="..\..\source\huc6280\opcodes\transfer.cpp">
       <Filter>Source Files\pce\huc6280\opcodes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\huc6270\helper.cpp">
       <Filter>Source Files\pce\huc6270</Filter>
     </ClCompile>
@@ -108,17 +105,11 @@
     <ClCompile Include="..\..\source\system\Input.cpp">
       <Filter>Source Files\system</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\source\system\Sound.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\source\ui\font_8x8.cpp">
       <Filter>Source Files\ui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\ui\UIObject.cpp">
       <Filter>Source Files\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\ui\UIRoot.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\Log.cpp">
       <Filter>Source Files</Filter>
@@ -136,6 +127,42 @@
       <Filter>Source Files\pce</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\GamePad.cpp">
+      <Filter>Source Files\pce</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6270\render.cpp">
+      <Filter>Source Files\pce\huc6270</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6280\new_huc6280.cpp">
+      <Filter>Source Files\pce\huc6280</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\huc6270\new_huc6270.cpp">
+      <Filter>Source Files\pce\huc6270</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ui\UIRoot.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ui\UIStatusBar.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ui\UIFont.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ui\UIRender.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\ui\UIResource.cpp">
+      <Filter>Source Files\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\winmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\system\Sound.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\PSG.cpp">
       <Filter>Source Files\pce</Filter>
     </ClCompile>
   </ItemGroup>
@@ -161,26 +188,8 @@
     <ClInclude Include="..\..\source\ui\UI.h">
       <Filter>Source Files\ui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\Emulator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\system\Input.h">
       <Filter>Source Files\system</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\system\Sound.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\ui\UIObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\ui\UIRoot.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\Log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\source\Config.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\source\PceTimer.h">
       <Filter>Source Files\pce</Filter>
@@ -194,5 +203,46 @@
     <ClInclude Include="..\..\source\GamePad.h">
       <Filter>Source Files\pce</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\ui\UIRoot.h">
+      <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ui\UIObject.h">
+      <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ui\UIStatusBar.h">
+      <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ui\UIFont.h">
+      <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ui\UIRender.h">
+      <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\ui\UIResource.h">
+      <Filter>Source Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Emulator.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Log.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Config.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\PSG.h">
+      <Filter>Source Files\pce</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\system\Sound.h">
+      <Filter>Source Files\system</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\source\res.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

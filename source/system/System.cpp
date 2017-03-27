@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <stdio.h>
 
 #include "System.h"
 
@@ -18,10 +19,11 @@ CSDLSystem::~CSDLSystem()
 	delete sound;
 }
 
+extern SDL_Window *sdlWindow;
 
 bool CSDLSystem::Init()
 {
-	return video->Init();
+	return video->Init(sdlWindow);
 }
 
 void CSDLSystem::Kill()

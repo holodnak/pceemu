@@ -34,4 +34,6 @@ public:
 	uint32_t Lookup(uint32_t pix);
 };
 
+#include "../Pce.h"
+
 #endif //PCEEMU_HUC6260_H

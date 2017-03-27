@@ -78,6 +78,8 @@
 
   **********************************************************************/
 
+#if 0
+
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -110,6 +112,9 @@ uint32_t *getline(int line);
 #define LENR    vdp.regs[18]
 #define DVSSR   vdp.regs[19]
 #define SATB	vdp.regs[19]
+
+
+#define MASTER_CLOCK	21477270
 
 huc6270_t vdp;
 
@@ -145,13 +150,14 @@ void reg_write16(uint32_t addr, uint16_t data)
 	vdp.regs[addr & 0x1F] = data;
 }
 
-#define LINES_PER_FRAME		(262)
+#define LINES_PER_FRAME		(framelines)
 #define FRAMES_PER_SECOND	(60)
 #define CYCLES_PER_FRAME	(clockspeed / FRAMES_PER_SECOND)
 #define CYCLES_PER_LINE		(CYCLES_PER_FRAME / LINES_PER_FRAME)
 #define LAST_LINE_CYCLE		(CYCLES_PER_LINE - 1)
 
 #define clockspeed  vdp.clockspeed
+#define framelines  vdp.framelines
 #define cycle       vdp.cycle
 #define scanline    vdp.scanline
 #define frame		vdp.frame
@@ -166,9 +172,12 @@ void reg_write16(uint32_t addr, uint16_t data)
 #define ch01		vdp.ch01
 #define ch23		vdp.ch23
 #define vrambuf		vdp.vrambuf
+#define lineWidth	vdp.linewidth
 
 void huc6270_init()
 {
+	huc6270_setclockspeed(MASTER_CLOCK / 4);
+	huc6270_setframelines(262);
 }
 
 void huc6270_reset()
@@ -177,6 +186,8 @@ void huc6270_reset()
     scanline = 0;
 	frame = 0;
 	CR = 0x40;
+
+
 }
 
 static uint8_t hds, hsw, hde, hdw;
@@ -188,13 +199,32 @@ static uint16_t bxr, byr;
 static uint16_t linebuffer[1024];
 
 #include "helper.cpp"
+#include "render.cpp"
 
-static void decode_current_tile()
+//decode a tileline to buffer
+static void decode_tile_line(uint16_t *buf, uint16_t b, uint16_t c01, uint16_t c23)
 {
 	uint16_t p, *lineptr;
 	int i;
-	
+
 	lineptr = linebuffer + (pixel & ~7);
+
+	for (i = 0; i < 8; i++) {
+		p = ((bat >> 12) & 0xF) << 4;
+		if (ch01 & (1 << (15 - i)))	p |= 2;
+		if (ch01 & (1 << (7 - i)))	p |= 1;
+		if (ch23 & (1 << (15 - i))) p |= 8;
+		if (ch23 & (1 << (7 - i)))	p |= 4;
+		lineptr[i] = p;
+	}
+}
+
+static void decode_current_tile(uint16_t *lineptr)
+{
+	uint16_t p;
+	int i;
+
+//	lineptr = linebuffer + (pixel & ~7);
 
 	for (i = 0; i < 8; i++) {
 		p = ((bat >> 12) & 0xF) << 4;
@@ -254,15 +284,21 @@ void process_sprites()
 		//this sprite is visible
 //		if (y >= vscanline && y < (vscanline + sprheight)) {
 		if (vscanline >= y && vscanline < (y + sprheight)) {
+
+			//if sat buffer is full, stop the loop, and say sprite overflow
+			if (satbufpos == (16 * 4)) {
+				vdp.status |= 0x02;
+				break;
+			}
+
 			satbuf[satbufpos + 0] = satptr[0];
 			satbuf[satbufpos + 1] = satptr[1];
 			satbuf[satbufpos + 2] = satptr[2];
-			satbuf[satbufpos + 3] = satptr[3];
+			satbuf[satbufpos + 3] = satptr[3] & 0xFFCF;
+			if (n == 0)
+				satbuf[satbufpos + 3] |= 0x10;
 			satbufpos += 4;
 
-			//if sat buffer is full, stop the loop
-			if (satbufpos == (16 * 4))
-				break;
 		}
 		satptr += 4;
 	}
@@ -274,50 +310,6 @@ void eval_sprites()
 //	uint8_t *ptr = sprlinebuffer;
 }
 
-/*
-quick_render() - draw whole tile line
-*/
-
-void quick_render(int line)
-{
-	uint16_t *lineptr = linebuffer;
-	int bataddr, tileaddr;
-	int i, x;
-	uint16_t tile, ch[4];
-	uint8_t p;
-
-	bataddr = 0;
-
-	bataddr += (line >> 3) * screenw;
-
-	//draw 34 tiles to the linebuffer
-	for (x = 0; x < 34; x++) {
-		tile = vram[bataddr];
-
-		tileaddr = (tile & 0xFFF) * 16;
-		tileaddr += (line & 7);
-
-		ch[0] = (uint8_t)(vram[tileaddr] >> 8);
-		ch[1] = (uint8_t)(vram[tileaddr] >> 0);
-		ch[2] = (uint8_t)(vram[tileaddr+8] >> 8);
-		ch[3] = (uint8_t)(vram[tileaddr+8] >> 0);
-
-		//draw tile line
-		for (i = 0; i < 8; i++) {
-			p = 0;
-			if (ch[0] & (1 << (7 - i)))	p |= 1;
-			if (ch[1] & (1 << (7 - i)))	p |= 2;
-			if (ch[2] & (1 << (7 - i))) p |= 4;
-			if (ch[3] & (1 << (7 - i)))	p |= 8;
-			lineptr[i] = (p == 0) ? 0x100 : p | (((tile >> 12) & 0xF) << 4);
-		}
-
-		lineptr += 8;
-		bataddr++;
-	}
-
-}
-
 void quick_draw_sprites()
 {
 	int i, n, x, y, pataddr, attrib;
@@ -325,12 +317,15 @@ void quick_draw_sprites()
 	int vscanline = scanline - visiblestart;
 	uint16_t spr_ch0, spr_ch1, spr_ch2, spr_ch3, p;
 	int sprwidth, sprheight;
+	uint8_t sprlinebuffer[1024];
 
 	if ((CR & 0x40) == 0) //sprites disabled
 		return;
 
 	if (vscanline < 0)
 		return;
+
+	memset(sprlinebuffer, 0, 1024);
 
 	for (n = 15; n >= 0; n--) {
 		int tbl_width[2] = { 16, 32 };
@@ -346,18 +341,36 @@ void quick_draw_sprites()
 		sprheight = tbl_height[(attrib >> 12) & 3];
 		hoffs = vscanline - y;
 
+		if (attrib & 0x8000) {
+			if (sprheight == 16)
+				hoffs = 15 - hoffs;
+			else if (sprheight == 32)
+				hoffs = 31 - hoffs;
+			else if (sprheight == 64)
+				hoffs = 63 - hoffs;
+		}
+
 		pataddr >>= 1;
 		if (sprwidth == 32) {
 			pataddr &= ~1;
 		}
 
-		if (sprheight == 32) {
+		if (sprheight == 16) {
+			if (attrib & 0x8000)
+				hoffs = 15 - hoffs;
+		}
+
+		else if (sprheight == 32) {
+			if (attrib & 0x8000)
+				hoffs = 31 - hoffs;
 			pataddr &= ~2;
 			if (hoffs >= 16)
 				pataddr |= 2;
 		}
 
-		if (sprheight == 64) {
+		else if (sprheight == 64) {
+			if (attrib & 0x8000)
+				hoffs = 63 - hoffs;
 			pataddr &= ~6;
 			if (hoffs >= 48)
 				pataddr |= 6;
@@ -414,13 +427,29 @@ void quick_draw_sprites()
 			if (p) {
 				int offs = x + i;
 
-				if (offs >= 0 && offs < 256)
-					linebuffer[offs] = p | ((attrib & 0xF) << 4) | 0x100;
+				if (offs >= 0 && offs < lineWidth) {
+
+					//check for sprite0
+					if (attrib & 0x10) {
+
+						//spr0 flag not set
+						if ((vdp.status & 1) == 0) {
+
+							//check for pixel already here
+							if (sprlinebuffer[offs])
+								vdp.status |= 1;
+						}
+					}
+
+					sprlinebuffer[offs] = (uint8_t)(p | ((attrib & 0xF) << 4));
+					linebuffer[offs] = sprlinebuffer[offs];
+				}
 			}
 		}
 
 		satbufptr -= 4;
 	}
+
 }
 
 void visible_line()
@@ -448,13 +477,13 @@ void visible_line()
 
 		case 1:
 			//put the current scroll address on the bus
-			xoff = (pixel >> 3) + (bxr >> 3);
+			xoff = (pixel + bxr) >> 3;
 		 	xoff &= (screenw - 1);
 
-			yoff = ((scanline - visiblestart) >> 3) + (byr >> 3);
+			yoff = ((scanline - visiblestart) + byr) >> 3;
 			yoff &= (screenh - 1);
 
-			busaddr = (xoff + (yoff * screenw)) >> 0;
+			busaddr = xoff + (yoff * screenw);
 			bat = memread16(busaddr);
 
 			//printf("bat (%04X) read at addr %X for x,y (%d, %d)\n", bat, busaddr, pixel, scanline);
@@ -463,7 +492,7 @@ void visible_line()
 		case 5:
 			//put the current scroll address on the bus
 			busaddr = (bat & 0xFFF) * 16;
-			busaddr += ((byr & 7) + (scanline - visiblestart)) & 7;
+			busaddr += (byr + (scanline - visiblestart)) & 7;
 
 			ch01 = memread16(busaddr);
 			break;
@@ -477,7 +506,7 @@ void visible_line()
 
 			ch23 = memread16(busaddr);
 
-			decode_current_tile();
+			decode_current_tile(linebuffer + (pixel & ~7));
 		}
 
 		pixel++;
@@ -504,15 +533,40 @@ void visible_line()
 	if (cycle == renderstop) {
 		uint32_t *screen = getline(scanline - visiblestart);
 		uint32_t color0, color;
-		uint16_t pix;
+		uint16_t pix, *lineptr;
 		int i, pos = cycle - renderstart;
+		int hoffs;
 
 		quick_draw_sprites();
 
 		color0 = pce->Huc6260()->Lookup(0x100);
 
+		memset(screen, 0, 512 * sizeof(uint32_t));
+
+		//TODO: this is hacky
+		lineptr = linebuffer + (bxr & 7);
+		hoffs = (hds - 1) - 2;
+
+		//cut off tiles
+		if (hoffs < 0) {
+			while (hoffs < 0) {
+				for (i = 0; i < 8; i++) {
+					*lineptr++ = 0;
+				}
+				hoffs++;
+			}
+		}
+
+		//show overscan
+		else if (hoffs > 0) {
+			for (i = 0; i < (hoffs * 8); i++) {
+				*screen++ = 0;
+			}
+		}
+		
+
 		for (i = 0; i < (renderstop - renderstart); i++) {
-			pix = linebuffer[i + (bxr & 7)];
+			pix = lineptr[i];
 
 			color = pce->Huc6260()->Lookup(pix);
 
@@ -527,29 +581,11 @@ extern int disasm;
 //execute one cycle
 void huc6270_step()
 {
-//	if (frame == 219)disasm = 1;
-
-/*	if (
-		(scanline == 255 && cycle == 13 && frame == 0) ||
-		(scanline == 205 && cycle == 283 && frame == 1)
-		) {
-		if (CR & 8) {
-			//set vblank flag (VD)
-			vdp.status |= 0x20;
-
-			//do irq
-			intctrl_set_irq(INT_IRQ1);
-			//	printf("vblank irq at line %d\n", scanline);
-		}
-
-	}*/
 
 	//visible scanlines
 	if (scanline >= visiblestart && scanline <= visiblestop) {
 
 		visible_line();
-
-//		quick_render(scanline - visiblestart);
 
 		//last cycle
 		if (cycle == LAST_LINE_CYCLE) {
@@ -591,7 +627,7 @@ void huc6270_step()
 
 				//do irq
 				pce->IntCtrl()->SetIrq(INT_IRQ1);
-				//	printf("vblank irq at line %d\n", scanline);
+				printf("vblank irq at line %d\n", scanline);
 			}
 
 			bgdotwidth = MWR & 3;
@@ -655,7 +691,8 @@ uint8_t huc6270_read(uint32_t addr)
 
 void huc6270_write(uint32_t addr, uint8_t data)
 {
-    switch(addr & 3) {
+//	printf("huc6270_write: %04X = %02X\n", addr, data);
+	switch(addr & 3) {
         case 0:
             vdp.addr = data & 0x1F;
             break;
@@ -693,9 +730,31 @@ void huc6270_write(uint32_t addr, uint8_t data)
 void huc6270_setclockspeed(int hz)
 {
 	clockspeed = hz;
+
+	if (hz == (MASTER_CLOCK / 4))
+		lineWidth = 256;
+
+	if (hz == (MASTER_CLOCK / 3))
+		lineWidth = 384;
+
+	if (hz == (MASTER_CLOCK / 2))
+		lineWidth = 512;
+}
+
+void huc6270_setframelines(int lines)
+{
+	framelines = lines;
 }
 
 int huc6270_getframe()
 {
 	return(frame);
 }
+
+int huc6270_getlinewidth()
+{
+return(lineWidth);
+}
+
+
+#endif

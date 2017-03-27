@@ -9,9 +9,12 @@
 #define INT_TIRQ	2
 #define INT_NMI		3
 
+class CPce;
+class CPicHuc6280;
 class CIntCtrl : public CPceDevice
 {
-private:
+	friend CPicHuc6280;
+protected:
 	uint8_t	Pending, Disable;
 public:
 	CIntCtrl(CPce *p);
@@ -24,4 +27,7 @@ public:
 
 	void SetIrq(int irq);
 	void ClearIrq(int irq);
+
 };
+
+#include "Pce.h"

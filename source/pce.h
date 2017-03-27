@@ -11,14 +11,22 @@
 #include "IntCtrl.h"
 #include "GamePad.h"
 
-#include "huc6260/huc6260.h"
-
 #include <stdint.h>
+
+class CHuc6260;
+class CHuc6270;
+class CHuc6280;
 
 class CPce
 {
 
 	friend CPceDevice;
+	friend CIntCtrl;
+
+	friend CHuc6260;
+	friend CHuc6270;
+	friend CHuc6280;
+	friend CPicHuc6280;
 
 private:
 	uint8_t *rom;
@@ -36,6 +44,8 @@ protected:
 	CPceDevice *gamePad;
 
 	CHuc6260 *huc6260;
+	CHuc6270 *huc6270;
+	CPicHuc6280 *huc6280;
 
 public:
 	CPce(CSDLSystem *system);
@@ -57,9 +67,15 @@ public:
 	CSDLSystem *System() { return(system); }
 
 	CPceTimer *Timer() { return((CPceTimer*)timer); }
-	CIntCtrl *IntCtrl() { return((CIntCtrl*)intCtrl); }
+	inline CIntCtrl *IntCtrl() { return((CIntCtrl*)intCtrl); }
 	CHuc6260 *Huc6260() { return(huc6260); }
+	CHuc6270 *Huc6270() { return(huc6270); }
+	CPicHuc6280 *Huc6280() { return(huc6280); }
 };
+
+#include "huc6260/huc6260.h"
+#include "huc6270/huc6270.h"
+#include "huc6280/huc6280.h"
 
 /////////////////////////////////////////
 

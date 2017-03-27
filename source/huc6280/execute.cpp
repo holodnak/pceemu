@@ -81,7 +81,7 @@ int huc6280_step()
 		//disasm = 0;
 
 		if (error) {
-			printf("PC = %04X\nVDP: cycle: %d, scanline: %d, frame: %d\n", pc, vdp.cycle, vdp.scanline, vdp.frame);
+//			printf("PC = %04X\nVDP: cycle: %d, scanline: %d, frame: %d\n", pc, vdp.cycle, vdp.scanline, vdp.frame);
 			huc6280_disasm(prevpc);
 			system("pause");
 			disasm = 1;

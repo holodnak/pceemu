@@ -1,2 +1,19 @@
 *.pce
+*.bin
+*.exe
+*.zip
+*.dll
+*.asm
+*.txt
+*.log
+*.nes
+cmake-build-*/
+*.aps
+vs/.vs/
+vs/Debug\ Optimized/
+vs/Debug/
+vs/Release/
 
+vs/pceemu/Debug\ Optimized/
+vs/pceemu/Debug/
+vs/pceemu/Release/

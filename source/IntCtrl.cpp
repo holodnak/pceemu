@@ -37,6 +37,7 @@ uint8_t CIntCtrl::Read(uint32_t addr)
 void CIntCtrl::Write(uint32_t addr, uint8_t data)
 {
 	switch (addr & 3) {
+
 	case 0:
 	case 1:
 		break;
@@ -46,9 +47,10 @@ void CIntCtrl::Write(uint32_t addr, uint8_t data)
 		break;
 
 	case 3:
+
 		//clear timer interrupt
 		ClearIrq(INT_TIRQ);
-		printf("timer irq cleared\n");
+	//	printf("timer irq cleared\n");
 		break;
 	}
 }
@@ -60,14 +62,14 @@ void CIntCtrl::SetIrq(int irq)
 	irq &= 3;
 	Pending |= (1 << irq);
 	if ((Disable & (1 << irq)) == 0)
-		huc6280_set_irq(intctrl_xlat[irq]);
-	else
-		printf("no irq, disabled %d", irq);
+		pce->huc6280->SetIrq(intctrl_xlat[irq]);
+//	else
+//		printf("no irq, disabled %d", irq);
 }
 
 void CIntCtrl::ClearIrq(int irq)
 {
 	irq &= 3;
 	Pending &= ~(1 << irq);
-	huc6280_clear_irq(intctrl_xlat[irq]);
+	pce->huc6280->ClearIrq(intctrl_xlat[irq]);
 }

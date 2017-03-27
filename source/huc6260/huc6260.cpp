@@ -66,7 +66,8 @@ void CHuc6260::Reset()
 	frameLines = 262;
 	stripBurst = 0;
 
-	huc6270_setclockspeed(MASTER_CLOCK / pixelClock);
+	pce->Huc6270()->SetClockDivider(pixelClock);
+	pce->Huc6270()->SetFrameLines(frameLines);
 }
 
 void CHuc6260::Tick(int clocks)
@@ -74,14 +75,14 @@ void CHuc6260::Tick(int clocks)
 	cycles += clocks;
 
 	while (cycles > 0) {
-		huc6270_step();
+		pce->huc6270->Step();
 		cycles -= pixelClock;
 	}
 }
 
 uint8_t CHuc6260::Read(uint32_t addr)
 {
-	uint8_t ret;
+	uint8_t ret = 0xFF;
 
 	switch (addr & 0x3FF) {
 
@@ -114,7 +115,10 @@ void CHuc6260::Write(uint32_t addr, uint8_t data)
 		stripBurst = (data >> 7) & 1;				//strip colorburst
 
 		//update timing in the huc6270
-		huc6270_setclockspeed(MASTER_CLOCK / pixelClock);
+		pce->Huc6270()->SetClockDivider(pixelClock);
+		pce->Huc6270()->SetFrameLines(frameLines);
+
+		printf("clockspeed updated: %f mhz (%d frame lines)\n", (double)(MASTER_CLOCK / pixelClock) / 1000000.0f, frameLines);
 		break;
 
 	case 2:

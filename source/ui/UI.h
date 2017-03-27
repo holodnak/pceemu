@@ -1,29 +1,19 @@
 #pragma once
 
+#include "UIRoot.h"
+#include "UIRender.h"
+
 #include <stdint.h>
 
-class CUIModule
-{
+#define uiassert(con) if(!(con)) {printf("ASSERT failed: "#con"\n"); system("pause"); exit(0);}
 
-public:
-
-	CUIModule() {
-
-	}
-
-	~CUIModule() {
-
-	}
-
-};
 
 class CUI
 {
 private:
-
-	//output framebuffer
-	uint32_t *buffer;
-	int width, height;
+	CFramebuffer	*framebuffer;
+	CUIRender		*render;
+	CUIRoot			*root;
 
 protected:
 
@@ -34,8 +24,11 @@ public:
 	CUI();
 	~CUI();
 
-	bool Init(uint32_t *b, int w, int h);
+	bool Init();
 	void Kill();
 
+	void Tick();
 	void Draw();
+
+	CFramebuffer *Framebuffer() { return(framebuffer); }
 };

@@ -167,7 +167,7 @@ void huc6280_setreadfunc(int page, readfunc_t rd) { read_mem_funcs[page & 0xFF] 
 void huc6280_setwritefunc(int page, writefunc_t wr) { write_mem_funcs[page & 0xFF] = wr; }
 void huc6280_setreadmem(int page, uint8_t *p) { read_mem_pages[page & 0xFF] = p; }
 void huc6280_setwritemem(int page, uint8_t *p) { write_mem_pages[page & 0xFF] = p; }
-void huc6280_setmem(int page, uint8_t *p) {	read_mem_pages[page & 0xFF] = write_mem_pages[page & 0xFF] = p; }
+void huc6280_setmem(int page, uint8_t *p) { read_mem_pages[page & 0xFF] = write_mem_pages[page & 0xFF] = p; }
 
 uint32_t huc6280_getpc() {
 	return(pc);

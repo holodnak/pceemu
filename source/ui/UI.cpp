@@ -1,4 +1,6 @@
 #include "UI.h"
+#include "UIStatusBar.h"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -7,7 +9,7 @@ extern uint64_t font_8x8[];
 void CUI::DrawChar(int x, int y, char ch)
 {
 	int i, j;
-	uint32_t *buf = buffer + x + (y * width);
+	uint32_t *buf = framebuffer->Pixels() + x + (y * framebuffer->Width());
 	uint64_t chbits = font_8x8[ch & 0x7F];
 	uint8_t chline;
 
@@ -21,7 +23,7 @@ void CUI::DrawChar(int x, int y, char ch)
 				buf[i] = 0xFF202020;
 			chline <<= 1;
 		}
-		buf += width;
+		buf += framebuffer->Width();
 	}
 
 }
@@ -59,21 +61,29 @@ void CUI::DrawString(int x, int y, char *str)
 
 CUI::CUI()
 {
-	buffer = 0;
-	width = 0;
-	height = 0;
+	framebuffer = new CFramebuffer(1024, 960);
+	render = new CUIRender(framebuffer);
+	root = new CUIRoot(this);
+
+	{
+		CUIObject *obj;
+
+		obj = (CUIObject*)new CUIStatusBar(root);
+
+		root->AddChild(obj);
+	}
 }
 
 
 CUI::~CUI()
 {
+	delete root;
+	delete framebuffer;
+	delete render;
 }
 
-bool CUI::Init(uint32_t *b, int w, int h)
+bool CUI::Init()
 {
-	buffer = b;
-	width = w;
-	height = h;
 	return(true);
 }
 
@@ -82,39 +92,37 @@ void CUI::Kill()
 
 }
 
-uint16_t vram_read16(uint32_t addr);
-void vram_write16(uint32_t addr, uint16_t data);
-
-uint16_t reg_read16(uint32_t addr);
+void CUI::Tick()
+{
+	root->Tick();
+}
 
 #include "../pce.h"
 
-extern CPce *pce;
-
-uint8_t huc6280_read(uint32_t addr);
-
-//#define huc6280_read 
+#define vram_read16 pce->Huc6270()->VramRead
+#define reg_read16 pce->Huc6270()->RegRead
 
 void CUI::Draw()
 {
 	char str[1024];
 	uint32_t addr;
-	uint16_t data;
-	int i, j;
+	int i;
 
-	memset(buffer, 0, width * height * 4);
+	framebuffer->Clear();
 
-	//return;
+	root->Draw();
+
+//	return;
 	//draw vram memory viewer...why?
 
-	DrawString(8, 8, "Test");
+/*	DrawString(8, 8, "Test");
 	addr = 0x2200;
 
 	//32 lines
 	for (i = 0; i < 32; i++) {
 
 		//8 words each
-		sprintf(str, "%04X: %02X %02X %02X %02X-%02X %02X %02X %02X", addr, huc6280_read(addr + 0), huc6280_read(addr + 1), huc6280_read(addr + 2), huc6280_read(addr + 3), huc6280_read(addr + 4), huc6280_read(addr + 5), huc6280_read(addr + 6), huc6280_read(addr + 7));
+	//	sprintf(str, "%04X: %02X %02X %02X %02X-%02X %02X %02X %02X", addr, huc6280_read(addr + 0), huc6280_read(addr + 1), huc6280_read(addr + 2), huc6280_read(addr + 3), huc6280_read(addr + 4), huc6280_read(addr + 5), huc6280_read(addr + 6), huc6280_read(addr + 7));
 
 		addr += 8;
 
@@ -122,8 +130,10 @@ void CUI::Draw()
 	}
 
 
-	return;
+	return;*/
 	//draw vram info
+
+
 	addr = 0x0000;
 	//32 lines
 	for (i = 0; i < 32; i++) {
@@ -151,5 +161,5 @@ void CUI::Draw()
 
 	sprintf(str, "HPR : %04X\nHDR : %04X", reg_read16(10), reg_read16(11));
 	DrawString(8, (i + 10) * 8, str);
-
+	
 }

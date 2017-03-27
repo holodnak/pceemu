@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "video.h"
 
-#define WIDTH 512
-#define HEIGHT 480
+#define WIDTH 512 * 2
+#define HEIGHT 480 * 2
 
 #define SCREEN_WIDTH    512 * 2
 #define SCREEN_HEIGHT   480 * 2
@@ -16,7 +16,7 @@ CVideo::~CVideo()
 	Kill();
 }
 
-bool CVideo::Init()
+bool CVideo::Init(SDL_Window *win)
 {
 	//Initialization flag
 	bool success = true;
@@ -25,11 +25,16 @@ bool CVideo::Init()
 	screenheight = SCREEN_HEIGHT;
 
 	//Create window
-	gWindow = SDL_CreateWindow("pceemu", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenwidth, screenheight, SDL_WINDOW_SHOWN);
-	if (gWindow == NULL) {
-		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-		success = false;
+	if (win == 0) {
+		gWindow = SDL_CreateWindow("pceemu", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, screenwidth, screenheight, SDL_WINDOW_SHOWN);
+		if (gWindow == NULL) {
+			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+			success = false;
+		}
 	}
+
+	else
+		gWindow = win;
 
 	printf("Window created! %d x %d\n", screenwidth, screenheight);
 

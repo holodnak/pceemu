@@ -6,34 +6,19 @@ CPceTimer::CPceTimer(CPce *p): CPceDevice(p, (char*)"Timer")
 {
 }
 
-
 CPceTimer::~CPceTimer()
 {
 }
 
 void CPceTimer::Reset()
 {
+	Div = 0;
+	Value = 0;
 }
 
 
 void CPceTimer::Tick(int Cycles)
 {
-/*	timer_div += clocks;
-	if (timer_div >= (1024 * 3)) {		//1024 7.15909mhz clocks
-		timer_div -= 1024 * 3;
-
-		if (timer_enable) {
-
-			if (timer_value == 0) {
-				timer_value = timer_latch;
-				intctrl_set_irq(INT_TIRQ);
-				printf("timer irq\n");
-			}
-			else
-				timer_value--;
-		}
-	}*/
-
 	Div += Cycles;
 	if (Div >= (1024 * 3)) {		//1024 7.15909mhz clocks
 		Div -= 1024 * 3;
@@ -43,7 +28,6 @@ void CPceTimer::Tick(int Cycles)
 			if (Value == 0) {
 				Value = Latch;
 				pce->IntCtrl()->SetIrq(INT_TIRQ);
-				printf("timer irq\n");
 			}
 			else
 				Value--;
